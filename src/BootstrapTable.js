@@ -455,20 +455,10 @@ class BootstrapTable extends Component {
     const showToolbarOnTop = toolbarPosition !== Const.TOOLBAR_POS_BOTTOM;
     const showToolbarOnBottom = toolbarPosition !== Const.TOOLBAR_POS_TOP;
     const { hideRowOnExpand = false } = this.props.options;
-    return (
-      <div className={ classSet('react-bs-table-container', this.props.className, this.props.containerClass) }
-        style={ this.props.containerStyle }>
-        { showToolbarOnTop ? toolBar : null }
-        { showPaginationOnTop ? pagination : null }
-        <div ref={ node => this.table = node }
-            className={ classSet('react-bs-table', { 'react-bs-table-bordered': this.props.bordered }, this.props.tableContainerClass) }
-            style={ { ...style, ...this.props.tableStyle } }
-            onMouseEnter={ this.handleMouseEnter }
-            onMouseLeave={ this.handleMouseLeave }>
-          <TableHeader
+    const headerDiv = (
+        <TableHeader
             ref={ node => this.header = node }
             version={ this.props.version }
-            colGroups={ colGroups }
             headerContainerClass={ this.props.headerContainerClass }
             tableHeaderClass={ this.props.tableHeaderClass }
             style={ this.props.headerStyle }
@@ -492,9 +482,22 @@ class BootstrapTable extends Component {
             toggleExpandAllChilds={ this.toggleExpandAllChilds }
             expandColumnBeforeSelectColumn={ expandColumnOptions.expandColumnBeforeSelectColumn }>
             { this.props.children }
-          </TableHeader>
+        </TableHeader>
+    );
+    return (
+      <div className={ classSet('react-bs-table-container', this.props.className, this.props.containerClass) }
+        style={ this.props.containerStyle }>
+        { showToolbarOnTop ? toolBar : null }
+        { showPaginationOnTop ? pagination : null }
+        <div ref={ node => this.table = node }
+            className={ classSet('react-bs-table', { 'react-bs-table-bordered': this.props.bordered }, this.props.tableContainerClass) }
+            style={ { ...style, ...this.props.tableStyle } }
+            onMouseEnter={ this.handleMouseEnter }
+            onMouseLeave={ this.handleMouseLeave }>
           <TableBody
-          ref={ node => this.body = node }
+            ref={ node => this.body = node }
+            headerDiv={ headerDiv }
+            colGroups={ colGroups }
             bodyContainerClass={ this.props.bodyContainerClass }
             tableBodyClass={ this.props.tableBodyClass }
             style={ { ...style, ...this.props.bodyStyle } }
@@ -1447,7 +1450,8 @@ class BootstrapTable extends Component {
     }
   }
   _scrollHeader = (e) => {
-    this.header.container.scrollLeft = e.currentTarget.scrollLeft;
+    // this.header.container.scrollLeft = e.currentTarget.scrollLeft;
+    this.body.container.scrollLeft = e.currentTarget.scrollLeft;
   }
 
   _scrollFooter = (e) => {
@@ -1464,7 +1468,7 @@ class BootstrapTable extends Component {
   }
 
   _adjustHeaderWidth() {
-    const header = this.header.getHeaderColGrouop();
+    // const header = this.header.getHeaderColGrouop();
     const tbody = this.body.tbody;
     const bodyHeader = this.body.getHeaderColGrouop();
     const firstRow = tbody.childNodes[0];
@@ -1492,8 +1496,8 @@ class BootstrapTable extends Component {
             cell.width = width + lastPadding + 'px';
           }
           const result = width + lastPadding + 'px';
-          header[i].style.width = result;
-          header[i].style.minWidth = result;
+          // header[i].style.width = result;
+          // header[i].style.minWidth = result;
           if (cells.length - 1 === i) {
             bodyHeader[i].style.width = width + 'px';
             bodyHeader[i].style.minWidth = width + 'px';
@@ -1503,21 +1507,22 @@ class BootstrapTable extends Component {
           }
         }
       }
-    } else {
-      for (const i in bodyHeader) {
-        if (bodyHeader.hasOwnProperty(i)) {
-          const child = bodyHeader[i];
-          if (child.style) {
-            if (child.style.width) {
-              header[i].style.width = child.style.width;
-            }
-            if (child.style.minWidth) {
-              header[i].style.minWidth = child.style.minWidth;
-            }
-          }
-        }
-      }
     }
+    // else {
+    //     for (const i in bodyHeader) {
+    //         if (bodyHeader.hasOwnProperty(i)) {
+    //             const child = bodyHeader[i];
+    //             if (child.style) {
+    //                 if (child.style.width) {
+    //                     header[i].style.width = child.style.width;
+    //                 }
+    //                 if (child.style.minWidth) {
+    //                     header[i].style.minWidth = child.style.minWidth;
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
     this.isVerticalScroll = isScroll;
   }
 
@@ -1526,15 +1531,14 @@ class BootstrapTable extends Component {
     let { maxHeight } = this.props;
     if ((typeof height === 'number' && !isNaN(height)) || height.indexOf('%') === -1) {
       this.body.container.style.height =
-        parseFloat(height, 10) - this.header.container.offsetHeight + 'px';
+        parseFloat(height, 10); // - this.header.container.offsetHeight + 'px';
     }
     if (maxHeight) {
       maxHeight = typeof maxHeight === 'number' ?
         maxHeight :
         parseInt(maxHeight.replace('px', ''), 10);
 
-      this.body.container.style.maxHeight =
-        maxHeight - this.header.container.offsetHeight + 'px';
+      this.body.container.style.maxHeight = maxHeight; // - this.header.container.offsetHeight + 'px';
     }
   }
 

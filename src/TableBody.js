@@ -235,6 +235,9 @@ class TableBody extends Component {
         </TableRow>
       ];
     }
+    const headerDiv = this.props.headerDiv || <div />;
+    const headerGrpElem = React.cloneElement(
+        this.props.colGroups, { ref: node => this.headerGrp = node });
 
     return (
       <div
@@ -242,6 +245,8 @@ class TableBody extends Component {
         className={ classSet('react-bs-container-body', this.props.bodyContainerClass) }
         style={ this.props.style }>
         <table className={ tableClasses }>
+          { /* headerGrpElem */}
+          { headerDiv }
           { React.cloneElement(tableHeader, { ref: node => this.header = node }) }
           <tbody ref={ node => this.tbody = node }>
             { tableRows }
@@ -250,6 +255,10 @@ class TableBody extends Component {
       </div>
     );
   }
+
+  // getHeaderColGrouop = () => {
+  //   return this.headerGrp.childNodes;
+  // }
 
   handleCellKeyDown = (e, lastEditCell) => {
     e.preventDefault();

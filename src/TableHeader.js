@@ -114,23 +114,12 @@ class TableHeader extends Component {
       );
     });
 
+    // This is header
     return (
-      <div
-        ref={ node => this.container = node }
-        className={ containerClasses }
-        style={ this.props.style }>
-        <table className={ tableClasses }>
-          { React.cloneElement(this.props.colGroups, { ref: node => this.headerGrp = node }) }
-          <thead ref={ node => this.header = node }>
-            { trs }
-          </thead>
-        </table>
-      </div>
+      <thead ref={ node => this.header = node }>
+        { trs }
+      </thead>
     );
-  }
-
-  getHeaderColGrouop = () => {
-    return this.headerGrp.childNodes;
   }
 
   renderSelectRowHeader(rowCount, rowKey) {
@@ -175,7 +164,6 @@ TableHeader.propTypes = {
   isSelectAll: PropTypes.oneOf([ true, 'indeterminate', false ]),
   sortIndicator: PropTypes.bool,
   customComponent: PropTypes.func,
-  colGroups: PropTypes.element,
   reset: PropTypes.bool,
   expandColumnVisible: PropTypes.bool,
   expandColumnComponent: PropTypes.func,
