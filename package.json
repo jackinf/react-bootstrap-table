@@ -1,6 +1,6 @@
 {
   "name": "speys-react-bootstrap-table",
-  "version": "4.3.2",
+  "version": "4.3.6",
   "description": "It's a react table for bootstrap Speys version",
   "main": "./lib/index.js",
   "repository": {
@@ -10,7 +10,8 @@
   "scripts": {
     "lint": "eslint src",
     "test": "jest",
-    "start": "gulp example-server"
+    "start": "gulp example-server",
+    "prod": "gulp prod"
   },
   "keywords": [
     "react",
